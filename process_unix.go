@@ -3,13 +3,13 @@
 package ps
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
 	"strconv"
 	"strings"
-	"bytes"
 )
 
 // UnixProcess is an implementation of Process that contains Unix-specific
@@ -58,7 +58,7 @@ func (p *UnixProcess) Refresh() error {
 	// Second get the commandline
 	clPath := fmt.Sprintf("/proc/%d/cmdline", p.pid)
 	cdataBytes, err := ioutil.ReadFile(clPath)
-	cdataBytes = bytes.Replace(cdataBytes, []byte("\0"), []byte(" "), -1)
+	cdataBytes = bytes.Replace(cdataBytes, []byte("\000"), []byte(" "), -1)
 	cdata := string(cdataBytes)
 	p.cmdline = strings.TrimSpace(cdata)
 
