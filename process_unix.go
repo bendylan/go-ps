@@ -53,7 +53,8 @@ func (p *UnixProcess) Refresh() error {
 	// Second get the commandline
 	clPath := fmt.Sprintf("/proc/%d/cmdline", p.pid)
 	cdataBytes, err := ioutil.ReadFile(clPath)
-	p.cmdline = strings.TrimSpace(cdataBytes)
+	cdata := string(cdataBytes)
+	p.cmdline = strings.TrimSpace(cdata)
 
 	// Move past the image name and start parsing the rest
 	data = data[binStart+binEnd+2:]
