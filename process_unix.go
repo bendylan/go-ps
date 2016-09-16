@@ -20,7 +20,8 @@ type UnixProcess struct {
 	pgrp  int
 	sid   int
 
-	binary string
+	binary  string
+	cmdline string
 }
 
 func (p *UnixProcess) Pid() int {
@@ -48,6 +49,11 @@ func (p *UnixProcess) Refresh() error {
 	binStart := strings.IndexRune(data, '(') + 1
 	binEnd := strings.IndexRune(data[binStart:], ')')
 	p.binary = data[binStart : binStart+binEnd]
+
+	// Second get the commandline
+	clPath := fmt.Sprintf("/proc/%d/cmdline", p.pid)
+	cdataBytes, err := ioutil.ReadFile(clPath)
+	p.cmdline = strings.Trimspace(cdataBytes)
 
 	// Move past the image name and start parsing the rest
 	data = data[binStart+binEnd+2:]
