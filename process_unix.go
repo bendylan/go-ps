@@ -36,6 +36,10 @@ func (p *UnixProcess) Executable() string {
 	return p.binary
 }
 
+func (p *UnixProcess) Cmdline() string {
+	return p.cmdline
+}
+
 // Refresh reloads all the data associated with this process.
 func (p *UnixProcess) Refresh() error {
 	statPath := fmt.Sprintf("/proc/%d/stat", p.pid)
